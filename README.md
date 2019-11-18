@@ -291,11 +291,26 @@ const instance = new Test();
 type TestTypeFromInstance = Class<typeof instance>;
 ```
 
+This works with type parameters:
+```js
+function newInstance<T>(c: Class<T>) {
+    ...
+}
+```
+
 ### TypeScript
 
 ```ts
 class Test {};
 type TestType = typeof Test;
+```
+
+This unfortunately doesn't work with type parameters:
+```ts
+// error: 'T' only refers to a type, but is being used as a value here.(2693)
+function newInstance<T>(c: typeof T) {
+    ...
+}
 ```
 
 ## Keys/Props Of Type
@@ -405,7 +420,7 @@ These are functions that return a boolean, performing some logic to assert that 
 
 The implementations differ between Flow and TypeScript:
 
-In TypeScript, it ensures the mapping between: `true` and `value is T`, versus in the case of Flow, it ensures the value is "checked" against the logic within the body of the function (i.e. things like `typeof`, `instanceof`, `value === undefined`). 
+In TypeScript, it ensures the mapping between: `true` and `value is T`, versus in the case of Flow, it ensures the value is "checked" against the logic within the body of the function (i.e. things like `typeof`, `instanceof`, `value === undefined`).
 
 This means you cannot tell Flow that the tested parameter is of an arbitrary type, which closes the door to complex cases, e.g.:
 - reusing logic from a different function
@@ -654,7 +669,7 @@ type C = Omit<A, B>;
 // C is { b: number }
 ```
 
-However, Flow implementation is stricter in this case, as B have a property that A does not have, it would rise an error. In Typescript, however, they would be ignored. 
+However, Flow implementation is stricter in this case, as B have a property that A does not have, it would rise an error. In Typescript, however, they would be ignored.
 
 # Same syntax
 
@@ -683,8 +698,8 @@ This is supported by Flow. And we list out the different syntaxes here: [Try Flo
 
 ```js
 type F = {
-  (): string,	
-  [[call]]: (number) => string,	
+  (): string,
+  [[call]]: (number) => string,
   [[call]](string): string
 }
 
@@ -719,7 +734,7 @@ Reference:
 
 - [Callable Objects](https://flow.org/en/docs/types/functions/#callable-objects-)
 - [immer.js](https://github.com/immerjs/immer/blob/master/src/immer.js.flow) uses it to overload the `produce` (default export) function which has multiple call signatures
-- [Styled Components](https://github.com/flow-typed/flow-typed/blob/master/definitions/npm/styled-components_v4.x.x/flow_v0.75.x-/styled-components_v4.x.x.js#L242) uses it to separate cases of being called on a string and wrapping a component 
+- [Styled Components](https://github.com/flow-typed/flow-typed/blob/master/definitions/npm/styled-components_v4.x.x/flow_v0.75.x-/styled-components_v4.x.x.js#L242) uses it to separate cases of being called on a string and wrapping a component
 - [Reselect Library Definition](https://github.com/flow-typed/flow-typed/blob/master/definitions/npm/re-reselect_v2.x.x/flow_v0.67.1-/re-reselect_v2.x.x.js) contains massive chunks of overloaded call properties
 
 ### TypeScript
