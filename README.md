@@ -321,13 +321,14 @@ const foo: Foo = new Bar();
 // No errors!
 ```
 
-You can work around this with tricks like the following:
+You can work around this with tricks like the following
+(`declare` only works in TypeScript >=3.7.0):
 ```ts
 class Foo {
-    private __nominal: void;
+    declare private __nominal: void;
 };
 class Bar {
-    private __nominal: void;
+    declare private __nominal: void;
 };
 
 const foo: Foo = new Bar();
